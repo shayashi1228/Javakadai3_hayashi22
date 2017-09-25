@@ -7,7 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 public class RegistServlet extends HttpServlet{
 	protected void service(HttpServletRequest req, HttpServletResponse res)
@@ -22,15 +21,16 @@ public class RegistServlet extends HttpServlet{
 				Word wd = new Word(english, japanese);
 				words.add(wd);
 				int count = wdao.registWords(words);
-				HttpSession session = req. getSession(true);
-				session.setAttribute("registCount", count);
+				req.setAttribute("registCount", count);
 
-				wdao.registWords(words);
-
-				int wordNum = wdao.getWords().size();
-
-				session.setAttribute("total", wordNum);
-
+				ArrayList<Word> wList = new ArrayList<>();
+				wList = wdao.getWords();
+				int wordNum = 0;
+				for(Word tmp : wList){
+					System.out.println(tmp);
+					wordNum++;
+				}
+				req.setAttribute("wordCount", wordNum);
 				req.getRequestDispatcher("result.jsp").forward(req, res);
-		}
 	}
+}
